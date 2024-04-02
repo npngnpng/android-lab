@@ -1,10 +1,13 @@
 package com.geunoo.android_lab
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import com.geunoo.android_lab.feature.splash.SplashScreen
 
 @Composable
 internal fun ShortBookApp() {
@@ -13,18 +16,20 @@ internal fun ShortBookApp() {
         startDestination = NavigationRoute.Auth.route,
         navController = navController,
     ) {
-        auth()
+        auth(navController)
         root()
         main()
     }
 }
 
-private fun NavGraphBuilder.auth() {
+private fun NavGraphBuilder.auth(navController: NavController) {
     navigation(
         startDestination = NavigationRoute.Auth.SPLASH,
         route = NavigationRoute.Auth.route,
     ) {
-
+        composable(route = NavigationRoute.Auth.SPLASH) {
+            SplashScreen(navController = navController)
+        }
     }
 }
 
