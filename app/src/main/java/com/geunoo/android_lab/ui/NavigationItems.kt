@@ -11,13 +11,13 @@ sealed class NavigationItems(
 ) {
     data object Home : NavigationItems(
         label = "홈",
-        route = NavigationRoute.Main.SEARCH_BOOKS,
+        route = NavigationRoute.Root.SHORT_BOOKS,
         icon = R.drawable.ic_home,
     )
 
     data object Add : NavigationItems(
         label = "추가하기",
-        route = NavigationRoute.Main.SHARE_BOOK,
+        route = NavigationRoute.Root.ADD_BOOK,
         icon = R.drawable.ic_add,
     )
 

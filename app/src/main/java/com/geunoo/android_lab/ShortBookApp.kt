@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import com.geunoo.android_lab.feature.root.RootScreen
 import com.geunoo.android_lab.feature.splash.SplashScreen
 
 @Composable
@@ -34,11 +35,8 @@ private fun NavGraphBuilder.auth(navController: NavController) {
 }
 
 private fun NavGraphBuilder.root() {
-    navigation(
-        startDestination = NavigationRoute.Root.SHORT_BOOKS,
-        route = NavigationRoute.Root.route,
-    ) {
-
+    composable(route = NavigationRoute.Root.route) {
+        RootScreen()
     }
 }
 

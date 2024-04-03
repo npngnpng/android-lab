@@ -27,13 +27,12 @@ internal fun NavigationBar(
         navController.currentBackStackEntryAsState().value?.destination?.route
     BottomAppBar {
         menu.forEach {
-            val selected by remember { mutableStateOf(currentSelectedRoute == it.route) }
             val color by animateColorAsState(
-                targetValue = if (selected) JobisTheme.colors.onBackground else JobisTheme.colors.surfaceTint,
+                targetValue = if (currentSelectedRoute == it.route) JobisTheme.colors.onBackground else JobisTheme.colors.surfaceTint,
                 label = "",
             )
             NavigationBarItem(
-                selected = selected,
+                selected = currentSelectedRoute == it.route,
                 onClick = { navController.navigate(it.route) },
                 icon = { Icon(painter = painterResource(id = it.icon), contentDescription = "", tint = color) },
                 label = {
