@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            JobisDesignSystemV2Theme {
+            JobisDesignSystemV2Theme(darkTheme = false) {
                 ShortBookApp()
             }
         }
