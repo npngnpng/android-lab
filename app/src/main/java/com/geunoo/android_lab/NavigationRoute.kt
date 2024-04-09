@@ -15,7 +15,7 @@ sealed class NavigationRoute(val route: String) {
 
     data object Main : NavigationRoute(route = "main") {
         val SEARCH_BOOKS = this.route + "/searchBooks"
-        val SHARE_BOOK = this.route + "/shareBook/{bookId}"
+        val SHARE_BOOK = this.route + "/shareBook/"
         val SHARE_BOOK_HISTORY = this.route + "/shareBookHistory"
     }
 }

@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.geunoo.android_lab.feature.root.RootScreen
+import com.geunoo.android_lab.feature.sharebook.ShareBookScreen
 import com.geunoo.android_lab.feature.splash.SplashScreen
 
 @Composable
@@ -20,7 +21,7 @@ internal fun ShortBookApp() {
         navController = navController,
     ) {
         auth(navController)
-        root()
+        root(navController = navController)
         main()
     }
 }
@@ -36,9 +37,9 @@ private fun NavGraphBuilder.auth(navController: NavController) {
     }
 }
 
-private fun NavGraphBuilder.root() {
+private fun NavGraphBuilder.root(navController: NavController) {
     composable(route = NavigationRoute.Root.route) {
-        RootScreen()
+        RootScreen(navHostController = navController)
     }
 }
 
@@ -48,11 +49,11 @@ private fun NavGraphBuilder.main() {
         route = NavigationRoute.Main.route,
     ) {
         composable(
-            route = NavigationRoute.Main.SHARE_BOOK,
-            arguments = listOf(navArgument("bookId") { type = NavType.LongType })
+            route = NavigationRoute.Main.SHARE_BOOK + "{bookId}",
+            arguments = listOf(navArgument("bookId") { type = NavType.StringType })
         ) {
-            val bookId = it.arguments?.getLong("bookId")
-            // ShareBook(bookId = bookId)
+            val bookId = it.arguments?.getString("bookId") ?: ""
+            ShareBookScreen(bookId = bookId)
         }
     }
 }

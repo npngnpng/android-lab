@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -14,7 +15,7 @@ import com.geunoo.android_lab.feature.shortbooks.ShortBooksScreen
 import com.geunoo.android_lab.ui.component.NavigationBar
 
 @Composable
-internal fun RootScreen() {
+internal fun RootScreen(navHostController: NavController) {
     val navController = rememberNavController()
 
     Scaffold(
@@ -29,7 +30,7 @@ internal fun RootScreen() {
                 ShortBooksScreen()
             }
             composable(route = NavigationRoute.Root.ADD_BOOK) {
-                AddBookScreen()
+                AddBookScreen(navController = navHostController)
             }
             composable(route = NavigationRoute.Root.MY_PAGE) {
                 MyPageScreen()

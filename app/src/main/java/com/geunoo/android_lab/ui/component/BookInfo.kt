@@ -15,12 +15,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import team.returm.jobisdesignsystemv2.foundation.JobisTypography
+import team.returm.jobisdesignsystemv2.utils.clickable
 
 @Composable
 fun BookInfo(
     title: String,
     author: String,
     image: String,
+    onClick: (() -> Unit)? = null,
 ) {
     Row(
         modifier = Modifier
@@ -31,6 +33,11 @@ fun BookInfo(
             .padding(
                 horizontal = 8.dp,
                 vertical = 6.dp,
+            )
+            .clickable(
+                enabled = true,
+                onPressed = {},
+                onClick = { onClick?.invoke() }
             ),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
