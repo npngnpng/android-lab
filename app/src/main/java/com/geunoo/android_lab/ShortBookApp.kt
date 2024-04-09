@@ -3,9 +3,11 @@ package com.geunoo.android_lab
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.geunoo.android_lab.feature.root.RootScreen
 import com.geunoo.android_lab.feature.splash.SplashScreen
@@ -45,6 +47,12 @@ private fun NavGraphBuilder.main() {
         startDestination = NavigationRoute.Main.SEARCH_BOOKS,
         route = NavigationRoute.Main.route,
     ) {
-
+        composable(
+            route = NavigationRoute.Main.SHARE_BOOK,
+            arguments = listOf(navArgument("bookId") { type = NavType.LongType })
+        ) {
+            val bookId = it.arguments?.getLong("bookId")
+            // ShareBook(bookId = bookId)
+        }
     }
 }
