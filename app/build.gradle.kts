@@ -50,7 +50,9 @@ android {
 }
 
 dependencies {
-
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.logging.interceptor)
     implementation(libs.androidx.navigation.compose)
     api(libs.io.coil.compose)
     implementation(libs.jobis.design.system)

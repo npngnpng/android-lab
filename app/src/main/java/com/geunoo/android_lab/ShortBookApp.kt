@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.geunoo.android_lab.feature.login.LoginScreen
 import com.geunoo.android_lab.feature.root.RootScreen
 import com.geunoo.android_lab.feature.sharebook.ShareBookScreen
 import com.geunoo.android_lab.feature.splash.SplashScreen
@@ -21,7 +22,7 @@ internal fun ShortBookApp() {
         navController = navController,
     ) {
         auth(navController)
-        root(navController = navController)
+        root(navController)
         main()
     }
 }
@@ -33,6 +34,9 @@ private fun NavGraphBuilder.auth(navController: NavController) {
     ) {
         composable(route = NavigationRoute.Auth.SPLASH) {
             SplashScreen(navController = navController)
+        }
+        composable(route = NavigationRoute.Auth.SIGN_IN) {
+            LoginScreen(navController = navController)
         }
     }
 }

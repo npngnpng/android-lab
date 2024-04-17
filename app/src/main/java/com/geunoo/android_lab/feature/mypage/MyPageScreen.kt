@@ -11,13 +11,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.geunoo.android_lab.NavigationRoute
+import com.geunoo.android_lab.common.LoginPreferences
 import com.geunoo.android_lab.ui.component.Header
 import team.returm.jobisdesignsystemv2.foundation.JobisIcon
 import team.returm.jobisdesignsystemv2.foundation.JobisTheme
@@ -26,7 +31,17 @@ import team.returm.jobisdesignsystemv2.foundation.JobisTypography
 val list = listOf("개발", "문학", "비문학")
 
 @Composable
-fun MyPageScreen() {
+fun MyPageScreen(navController: NavController) {
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = Unit) {
+        if (!LoginPreferences(context).isLogin()) {
+            navController.navigate(NavigationRoute.Auth.SIGN_IN) {
+                popUpTo(0)
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize(),

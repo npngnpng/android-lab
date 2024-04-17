@@ -33,7 +33,7 @@ internal fun RootScreen(navHostController: NavController) {
                 AddBookScreen(navController = navHostController)
             }
             composable(route = NavigationRoute.Root.MY_PAGE) {
-                MyPageScreen()
+                MyPageScreen(navController = navHostController)
             }
         }
     }
