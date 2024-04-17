@@ -15,4 +15,8 @@ class LoginPreferences(context: Context) {
     fun setToken(token: String) {
         preference.edit().putString("token", token).apply()
     }
+
+    fun getToken(): String {
+        return ("Bearer " + preference.getString("token", ""))
+    }
 }

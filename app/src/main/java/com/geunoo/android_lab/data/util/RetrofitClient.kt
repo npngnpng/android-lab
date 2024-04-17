@@ -1,5 +1,6 @@
 package com.geunoo.android_lab.data.util
 
+import com.geunoo.android_lab.data.book.BookApi
 import com.geunoo.android_lab.data.user.UserApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -22,4 +23,6 @@ object RetrofitClient {
         .build();
 
     val userApi = retrofit.create(UserApi::class.java)
+
+    val bookApi = retrofit.create(BookApi::class.java)
 }

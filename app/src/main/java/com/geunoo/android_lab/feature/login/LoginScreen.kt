@@ -1,6 +1,5 @@
 package com.geunoo.android_lab.feature.login
 
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -60,7 +59,6 @@ fun LoginScreen(navController: NavController) {
                         popUpTo(0)
                     }
                 }.onFailure {
-                    Log.d("TEST", it.toString())
                     withContext(Dispatchers.Main) {
                         JobisToast.create(
                             context = context,

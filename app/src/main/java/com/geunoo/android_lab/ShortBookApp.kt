@@ -53,11 +53,11 @@ private fun NavGraphBuilder.main() {
         route = NavigationRoute.Main.route,
     ) {
         composable(
-            route = NavigationRoute.Main.SHARE_BOOK + "{bookId}",
-            arguments = listOf(navArgument("bookId") { type = NavType.StringType })
+            route = NavigationRoute.Main.SHARE_BOOK + "{isbn}",
+            arguments = listOf(navArgument("isbn") { type = NavType.StringType })
         ) {
-            val bookId = it.arguments?.getString("bookId") ?: ""
-            ShareBookScreen(bookId = bookId)
+            val isbn = it.arguments?.getString("isbn") ?: ""
+            ShareBookScreen(isbn = isbn)
         }
     }
 }
