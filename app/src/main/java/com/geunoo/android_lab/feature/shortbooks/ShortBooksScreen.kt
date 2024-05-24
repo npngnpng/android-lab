@@ -1,12 +1,11 @@
 package com.geunoo.android_lab.feature.shortbooks
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,10 +23,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -51,16 +52,17 @@ import team.returm.jobisdesignsystemv2.utils.clickable
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ShortBooksScreen() {
-    val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val books = remember { mutableStateListOf<ShortBookResponse>() }
     val pagerState = rememberPagerState(
         initialPage = 0,
-        pageCount = { Int.MAX_VALUE },
+        pageCount = { books.size },
     )
-    var bookContent = remember { mutableStateOf("") }
-    val (isLiked, setIsLiked) = remember { mutableStateOf(false) }
-    val books = remember { mutableStateListOf<ShortBookResponse>() }
+    var bookContent by remember { mutableStateOf("") }
+    var isLiked by remember { mutableStateOf(false) }
+
 
     LaunchedEffect(Unit) {
         scope.launch {
@@ -79,43 +81,41 @@ fun ShortBooksScreen() {
         }
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Header()
-        VerticalPager(
-            modifier = Modifier.combinedClickable(
-                onClick = {},
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() },
-                onDoubleClick = {
-                    Log.d("TEST", "testtestetest")
+    Box {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Header()
+            VerticalPager(
+                modifier = Modifier.clickable(
+                    enabled = true,
+                    onClick = { showDialog = true },
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() },
+                ),
+                state = pagerState,
+            ) {
+                books.getOrNull(it)?.run {
+                    Book(
+                        imageUrl = imageUrl,
+                        title = title,
+                        author = author,
+                        isLiked = isLiked,
+                    ) {
+                        isLiked = it
+                    }
                 }
-            ),
-            state = pagerState) {
-            books.getOrNull(it)?.run {
-                bookContent.value = content
-                Book(
-                    imageUrl = imageUrl,
-                    title = title,
-                    content = content,
-                    author = author,
-                    setShowDialog = setShowDialog,
-                    isLiked = isLiked,
-                    setIsLiked = setIsLiked,
-                )
-
             }
         }
-    }
-    if (showDialog) {
-        ContentDialog(
-            content = bookContent.value,
-            hideDialog = {
-                setShowDialog(false)
-            }
-        )
+        if (showDialog) {
+            ContentDialog(
+                content = books[pagerState.currentPage].content,
+                hideDialog = {
+                    showDialog = false
+                }
+            )
+        }
     }
 }
 
@@ -164,20 +164,13 @@ fun ContentDialog(
 private fun Book(
     imageUrl: String,
     title: String,
-    content: String,
     author: String,
-    setShowDialog: (Boolean) -> Unit,
     isLiked: Boolean,
     setIsLiked: (Boolean) -> Unit,
 ) {
     Column(modifier = Modifier.padding(bottom = 24.dp)) {
         Column(
-            modifier = Modifier
-                .clickable(
-                    enabled = true,
-                    onPressed = {},
-                    onClick = { setShowDialog(true) },
-                ),
+            modifier = Modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             AsyncImage(
