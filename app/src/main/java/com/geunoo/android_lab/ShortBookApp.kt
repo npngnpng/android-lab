@@ -23,7 +23,7 @@ internal fun ShortBookApp() {
     ) {
         auth(navController)
         root(navController)
-        main()
+        main(navController)
     }
 }
 
@@ -47,7 +47,7 @@ private fun NavGraphBuilder.root(navController: NavController) {
     }
 }
 
-private fun NavGraphBuilder.main() {
+private fun NavGraphBuilder.main(navController: NavController) {
     navigation(
         startDestination = NavigationRoute.Main.SEARCH_BOOKS,
         route = NavigationRoute.Main.route,
@@ -57,7 +57,7 @@ private fun NavGraphBuilder.main() {
             arguments = listOf(navArgument("isbn") { type = NavType.StringType })
         ) {
             val isbn = it.arguments?.getString("isbn") ?: ""
-            ShareBookScreen(isbn = isbn)
+            ShareBookScreen(isbn = isbn, navController = navController)
         }
     }
 }

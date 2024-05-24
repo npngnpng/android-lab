@@ -14,7 +14,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.geunoo.android_lab.NavigationRoute
 import com.geunoo.android_lab.common.LoginPreferences
+import com.geunoo.android_lab.data.book.dto.request.CreateBookRequest
 import com.geunoo.android_lab.data.book.dto.response.BookInfoResponse
 import com.geunoo.android_lab.data.util.RetrofitClient
 import com.geunoo.android_lab.ui.component.BookInfo
@@ -26,9 +29,10 @@ import team.returm.jobisdesignsystemv2.button.ButtonColor
 import team.returm.jobisdesignsystemv2.button.JobisButton
 import team.returm.jobisdesignsystemv2.textfield.JobisTextField
 import team.returm.jobisdesignsystemv2.toast.JobisToast
+import java.util.UUID
 
 @Composable
-fun ShareBookScreen(isbn: String) {
+fun ShareBookScreen(isbn: String, navController: NavController) {
     val (text, onTextChange) = remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -45,7 +49,7 @@ fun ShareBookScreen(isbn: String) {
         )
     }
     LaunchedEffect(key1 = Unit) {
-        scope.launch {
+        scope.launch(Dispatchers.IO) {
             runCatching {
                 RetrofitClient.bookApi.queryBooks(
                     accessToken = LoginPreferences(context).getToken(),
@@ -84,7 +88,35 @@ fun ShareBookScreen(isbn: String) {
             color = ButtonColor.Primary,
             text = "작성 하기",
         ) {
-
+            scope.launch(Dispatchers.IO) {
+                runCatching {
+                    RetrofitClient.bookApi.shareBook(
+                        accessToken = LoginPreferences(context).getToken(),
+                        isbn = isbn,
+                        request = CreateBookRequest(
+                            review = text,
+                            listOf(UUID.fromString("2ff98fb0-f0e2-11ee-9dc4-e3bb01d21b10")),
+                        )
+                    )
+                }.onSuccess {
+                    withContext(Dispatchers.Main) {
+                        navController.navigate(NavigationRoute.Root.route) {
+                            popUpTo(0)
+                        }
+                        JobisToast.create(
+                            context = context,
+                            message = "책이 성공적으로 공유됨"
+                        ).show()
+                    }
+                }.onFailure {
+                    withContext(Dispatchers.Main) {
+                        JobisToast.create(
+                            context = context,
+                            message = it.message ?: "알 수 없는 오류",
+                        ).show()
+                    }
+                }
+            }
         }
     }
 }
