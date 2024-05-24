@@ -28,62 +28,6 @@ import kotlinx.coroutines.withContext
 import team.returm.jobisdesignsystemv2.textfield.JobisTextField
 import team.returm.jobisdesignsystemv2.toast.JobisToast
 
-//val list = listOf(
-//    BooksEntity.BookEntity(
-//        "9788934949671",
-//        "https://shopping-phinf.pstatic.net/main_3246548/32465489651.20230912084105.jpg",
-//        "우리는 여전히 삶을 사랑하는가",
-//        "에리히 프롬"
-//    ),
-//    BooksEntity.BookEntity(
-//        "9788934949671",
-//        "https://shopping-phinf.pstatic.net/main_3246548/32465489651.20230912084105.jpg",
-//        "우리는 여전히 삶을 사랑하는가",
-//        "에리히 프롬"
-//    ),
-//    BooksEntity.BookEntity(
-//        "9788934949671",
-//        "https://shopping-phinf.pstatic.net/main_3246548/32465489651.20230912084105.jpg",
-//        "우리는 여전히 삶을 사랑하는가",
-//        "에리히 프롬"
-//    ),
-//    BooksEntity.BookEntity(
-//        "9788934949671",
-//        "https://shopping-phinf.pstatic.net/main_3246548/32465489651.20230912084105.jpg",
-//        "우리는 여전히 삶을 사랑하는가",
-//        "에리히 프롬"
-//    ),
-//    BooksEntity.BookEntity(
-//        "9788934949671",
-//        "https://shopping-phinf.pstatic.net/main_3246548/32465489651.20230912084105.jpg",
-//        "우리는 여전히 삶을 사랑하는가",
-//        "에리히 프롬"
-//    ),
-//    BooksEntity.BookEntity(
-//        "9788934949671",
-//        "https://shopping-phinf.pstatic.net/main_3246548/32465489651.20230912084105.jpg",
-//        "우리는 여전히 삶을 사랑하는가",
-//        "에리히 프롬"
-//    ),
-//    BooksEntity.BookEntity(
-//        "9788934949671",
-//        "https://shopping-phinf.pstatic.net/main_3246548/32465489651.20230912084105.jpg",
-//        "우리는 여전히 삶을 사랑하는가",
-//        "에리히 프롬"
-//    ),
-//    BooksEntity.BookEntity(
-//        "9788934949671",
-//        "https://shopping-phinf.pstatic.net/main_3246548/32465489651.20230912084105.jpg",
-//        "우리는 여전히 삶을 사랑하는가",
-//        "에리히 프롬"
-//    ),
-//    BooksEntity.BookEntity(
-//        "9788934949671",
-//        "https://shopping-phinf.pstatic.net/main_3246548/32465489651.20230912084105.jpg",
-//        "우리는 여전히 삶을 사랑하는가",
-//        "에리히 프롬"
-//    ),
-//)
 val list = mutableListOf<BookInfoResponse>()
 
 @Composable

@@ -18,9 +18,9 @@ object RetrofitClient {
 
     private val retrofit = Retrofit.Builder()
         .client(okHttpClient)
-        .baseUrl("http://192.168.1.137:8080")
+        .baseUrl("http://192.168.1.99:8080")
         .addConverterFactory(GsonConverterFactory.create())
-        .build();
+        .build()
 
     val userApi = retrofit.create(UserApi::class.java)
 

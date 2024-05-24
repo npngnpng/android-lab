@@ -1,6 +1,5 @@
 package com.geunoo.android_lab.feature.login
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

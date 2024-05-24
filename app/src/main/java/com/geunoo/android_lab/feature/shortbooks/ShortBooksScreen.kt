@@ -1,7 +1,11 @@
 package com.geunoo.android_lab.feature.shortbooks
 
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,113 +13,107 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.geunoo.android_lab.R
+import com.geunoo.android_lab.data.book.dto.response.ShortBookResponse
+import com.geunoo.android_lab.data.util.RetrofitClient
 import com.geunoo.android_lab.ui.component.Header
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import team.returm.jobisdesignsystemv2.foundation.JobisTheme
 import team.returm.jobisdesignsystemv2.foundation.JobisTypography
+import team.returm.jobisdesignsystemv2.toast.JobisToast
 import team.returm.jobisdesignsystemv2.utils.clickable
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ShortBooksScreen() {
     val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        pageCount = { Int.MAX_VALUE },
+    )
+    var bookContent = remember { mutableStateOf("") }
+    val (isLiked, setIsLiked) = remember { mutableStateOf(false) }
+    val books = remember { mutableStateListOf<ShortBookResponse>() }
+
+    LaunchedEffect(Unit) {
+        scope.launch {
+            runCatching {
+                RetrofitClient.bookApi.queryShortBook()
+            }.onSuccess {
+                books.addAll(it.books)
+            }.onFailure {
+                withContext(Dispatchers.Main) {
+                    JobisToast.create(
+                        context = context,
+                        message = it.message ?: "알 수 없는 오류",
+                    ).show()
+                }
+            }
+        }
+    }
+
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(
-                enabled = true,
-                onPressed = {},
-                onClick = { setShowDialog(true) },
-            ),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Header()
-        AsyncImage(
-            modifier = Modifier
-                .aspectRatio(0.8f),
-            model = "https://shopping-phinf.pstatic.net/main_3246548/32465489651.20230912084105.jpg",
-            contentDescription = "",
-        )
-        Text(
-            modifier = Modifier
-                .padding(
-                    top = 16.dp,
-                    bottom = 16.dp,
+        VerticalPager(
+            modifier = Modifier.combinedClickable(
+                onClick = {},
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() },
+                onDoubleClick = {
+                    Log.d("TEST", "testtestetest")
+                }
+            ),
+            state = pagerState) {
+            books.getOrNull(it)?.run {
+                bookContent.value = content
+                Book(
+                    imageUrl = imageUrl,
+                    title = title,
+                    content = content,
+                    author = author,
+                    setShowDialog = setShowDialog,
+                    isLiked = isLiked,
+                    setIsLiked = setIsLiked,
                 )
-                .clickable(
-                    enabled = true,
-                    onPressed = {},
-                    onClick = { setShowDialog(true) },
-                ),
-            text = "눌러서 내용 보기",
-            color = JobisTheme.colors.onSurface,
-        )
-        Row(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color.White,
-                            JobisTheme.colors.onSurfaceVariant,
-                        )
-                    )
-                ),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Column {
-                Text(
-                    modifier = Modifier
-                        .padding(
-                            start = 12.dp,
-                            top = 18.dp,
-                        ),
-                    text = "우리는 여전히 삶을 사랑하는가",
-                    style = JobisTypography.HeadLine,
-                    color = JobisTheme.colors.onBackground,
-                )
-                Text(
-                    modifier = Modifier
-                        .padding(
-                            top = 8.dp,
-                            start = 12.dp,
-                        ),
-                    text = "에리히 프롬",
-                    style = JobisTypography.Body,
-                )
+
             }
-            Icon(
-                modifier = Modifier
-                    .padding(
-                        start = 80.dp,
-                        end = 18.dp,
-                        top = 18.dp,
-                    ),
-                painter = painterResource(id = R.drawable.ic_like_false),
-                contentDescription = ""
-            )
         }
     }
     if (showDialog) {
         ContentDialog(
-            content = "dajldskajdklsajdklsadjklsadjkasljdklasjdkalsjdklajdkldasjkljsakljdkl",
+            content = bookContent.value,
             hideDialog = {
                 setShowDialog(false)
-                Log.d("TEST", showDialog.toString())
             }
         )
     }
@@ -130,12 +128,13 @@ fun ContentDialog(
         modifier = Modifier
             .fillMaxSize()
             .alpha(0.8f)
-            .background(Color.Black)
             .clickable(
-                enabled = true,
-                onPressed = {},
                 onClick = hideDialog,
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() },
             )
+            .verticalScroll(rememberScrollState())
+            .background(Color.Black)
             .padding(
                 horizontal = 34.dp,
                 vertical = 18.dp,
@@ -158,5 +157,91 @@ fun ContentDialog(
             style = JobisTypography.Caption,
             color = JobisTheme.colors.surfaceTint,
         )
+    }
+}
+
+@Composable
+private fun Book(
+    imageUrl: String,
+    title: String,
+    content: String,
+    author: String,
+    setShowDialog: (Boolean) -> Unit,
+    isLiked: Boolean,
+    setIsLiked: (Boolean) -> Unit,
+) {
+    Column(modifier = Modifier.padding(bottom = 24.dp)) {
+        Column(
+            modifier = Modifier
+                .clickable(
+                    enabled = true,
+                    onPressed = {},
+                    onClick = { setShowDialog(true) },
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            AsyncImage(
+                modifier = Modifier
+                    .aspectRatio(0.8f),
+                model = imageUrl,
+                contentDescription = "",
+            )
+            Text(
+                modifier = Modifier
+                    .padding(
+                        top = 16.dp,
+                        bottom = 16.dp,
+                    ),
+                text = "눌러서 내용 보기",
+                color = JobisTheme.colors.onSurface,
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column {
+                Text(
+                    modifier = Modifier
+                        .padding(
+                            start = 12.dp,
+                            top = 18.dp,
+                        ),
+                    text = title,
+                    style = JobisTypography.HeadLine,
+                    color = JobisTheme.colors.onBackground,
+                )
+                Text(
+                    modifier = Modifier
+                        .padding(
+                            top = 8.dp,
+                            start = 12.dp,
+                        ),
+                    text = author,
+                    style = JobisTypography.Body,
+                )
+            }
+            Icon(
+                modifier = Modifier
+                    .padding(
+                        end = 18.dp,
+                        top = 18.dp,
+                    )
+                    .clickable(
+                        enabled = true,
+                        onPressed = {},
+                        onClick = { setIsLiked(!isLiked) }
+                    ),
+                painter = painterResource(id = if (isLiked) R.drawable.ic_like_true else R.drawable.ic_like_false),
+                contentDescription = ""
+            )
+        }
     }
 }
