@@ -27,6 +27,7 @@ import com.geunoo.android_lab.ui.component.Header
 import team.returm.jobisdesignsystemv2.foundation.JobisIcon
 import team.returm.jobisdesignsystemv2.foundation.JobisTheme
 import team.returm.jobisdesignsystemv2.foundation.JobisTypography
+import team.returm.jobisdesignsystemv2.utils.clickable
 
 val list = listOf("개발", "문학", "비문학")
 
@@ -69,16 +70,23 @@ fun MyPageScreen(navController: NavController) {
             text = "내 숏북",
             painter = painterResource(id = JobisIcon.Code),
             tint = JobisTheme.colors.onPrimary,
+            onClick = {}
         )
         Menu(
             text = "로그아웃",
             painter = painterResource(id = JobisIcon.LogOut),
             tint = JobisTheme.colors.error,
-        )
+        ) {
+            LoginPreferences(context = context).deleteToken()
+            navController.navigate(NavigationRoute.Root.route) {
+                popUpTo(0)
+            }
+        }
         Menu(
             text = "회원 탈퇴",
             painter = painterResource(id = JobisIcon.PersonRemove),
             tint = JobisTheme.colors.error,
+            onClick = {}
         )
     }
 }
@@ -111,9 +119,16 @@ private fun Menu(
     text: String,
     painter: Painter,
     tint: Color,
+    onClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(
+                enabled = true,
+                onClick = onClick,
+                onPressed = {}
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(

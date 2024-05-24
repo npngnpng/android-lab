@@ -53,7 +53,7 @@ fun LoginScreen(navController: NavController) {
                         password = password,
                     )
                 }.onSuccess {
-                    LoginPreferences(context).setToken(it.accessToken)
+                    LoginPreferences(context).setToken("Bearer ${it.accessToken}")
                     navController.navigate(NavigationRoute.Root.route) {
                         popUpTo(0)
                     }
