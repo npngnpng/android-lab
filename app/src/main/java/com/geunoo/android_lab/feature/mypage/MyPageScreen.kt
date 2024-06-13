@@ -70,7 +70,9 @@ fun MyPageScreen(navController: NavController) {
             text = "내 숏북",
             painter = painterResource(id = JobisIcon.Code),
             tint = JobisTheme.colors.onPrimary,
-            onClick = {}
+            onClick = {
+                navController.navigate(NavigationRoute.Main.SHARE_BOOK_HISTORY)
+            }
         )
         Menu(
             text = "로그아웃",

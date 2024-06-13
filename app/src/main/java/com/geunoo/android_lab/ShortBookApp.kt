@@ -11,7 +11,9 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.geunoo.android_lab.feature.login.LoginScreen
 import com.geunoo.android_lab.feature.root.RootScreen
+import com.geunoo.android_lab.feature.share_book_history.ShareBookHistoryScreen
 import com.geunoo.android_lab.feature.sharebook.ShareBookScreen
+import com.geunoo.android_lab.feature.signup.SignUpScreen
 import com.geunoo.android_lab.feature.splash.SplashScreen
 
 @Composable
@@ -38,6 +40,9 @@ private fun NavGraphBuilder.auth(navController: NavController) {
         composable(route = NavigationRoute.Auth.SIGN_IN) {
             LoginScreen(navController = navController)
         }
+        composable(route = NavigationRoute.Auth.SIGN_UP) {
+            SignUpScreen(navController = navController)
+        }
     }
 }
 
@@ -58,6 +63,11 @@ private fun NavGraphBuilder.main(navController: NavController) {
         ) {
             val isbn = it.arguments?.getString("isbn") ?: ""
             ShareBookScreen(isbn = isbn, navController = navController)
+        }
+        composable(
+            route = NavigationRoute.Main.SHARE_BOOK_HISTORY,
+        ) {
+            ShareBookHistoryScreen()
         }
     }
 }

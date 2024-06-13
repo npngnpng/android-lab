@@ -1,10 +1,12 @@
 package com.geunoo.android_lab.feature.login
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -12,9 +14,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.geunoo.android_lab.NavigationRoute
@@ -28,8 +33,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import team.returm.jobisdesignsystemv2.button.ButtonColor
 import team.returm.jobisdesignsystemv2.button.JobisButton
+import team.returm.jobisdesignsystemv2.foundation.JobisTheme
 import team.returm.jobisdesignsystemv2.textfield.JobisTextField
 import team.returm.jobisdesignsystemv2.toast.JobisToast
+import team.returm.jobisdesignsystemv2.utils.clickable
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -59,6 +66,7 @@ fun LoginScreen(navController: NavController) {
                     }
                 }.onFailure {
                     withContext(Dispatchers.Main) {
+                        Log.d("TEST", it.message.toString())
                         JobisToast.create(
                             context = context,
                             message = it.message ?: "알 수 없는 오류",
@@ -69,7 +77,9 @@ fun LoginScreen(navController: NavController) {
         }
     }
 
-    Column {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         Image(
             modifier = Modifier.fillMaxWidth(),
             painter = painterResource(id = R.drawable.ic_logo),
@@ -87,6 +97,16 @@ fun LoginScreen(navController: NavController) {
             hint = "비밀번호",
             onValueChange = onPasswordChange,
             showVisibleIcon = true,
+        )
+        Text(
+            modifier = Modifier.clickable(
+                enabled = true,
+                onClick = { navController.navigate(NavigationRoute.Auth.SIGN_UP) },
+                onPressed = {}
+            ),
+            text = "회원가입하기",
+            color = Color.Gray,
+            textDecoration = TextDecoration.Underline,
         )
         JobisButton(
             modifier = Modifier

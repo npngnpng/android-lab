@@ -18,7 +18,6 @@ interface BookApi {
         @Query("name") name: String,
     ): BooksResponse
 
-
     @GET("/books/short")
     suspend fun queryShortBook(): QueryShortBookResponse
 
@@ -28,4 +27,9 @@ interface BookApi {
         @Path("isbn") isbn: String,
         @Body request: CreateBookRequest,
     )
+
+    @GET("/books/my")
+    suspend fun queryMyBooks(
+        @Header("Authorization") accessToken: String,
+    ): QueryShortBookResponse
 }
